@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Panier{% endblock %}
+
+{% block content %}
+<div class="flex items-end justify-between gap-4 flex-wrap mb-6">
+  <div>
+    <h1 class="text-3xl font-bold">🧺 Panier</h1>
+    <p class="text-slate-600">Vérifie la commande avant de valider.</p>
+  </div>
+
+  <a href="/" class="rounded-xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-800 transition">
+    ← Retour au menu
+  </a>
+</div>
+
+<div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-6">
+  {% if panier.items.count > 0 %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-slate-600 border-b">
+            <th class="py-3">Plat</th>
+            <th class="py-3 text-center">Quantité</th>
+            <th class="py-3 text-right">Total</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for item in panier.items.all %}
+            <tr class="border-b last:border-b-0">
+              <td class="py-4 font-medium">{{ item.plat.nom }}</td>
+              <td class="py-4 text-center">
+                <span class="inline-flex items-center justify-center rounded-full bg-slate-100 px-3 py-1 font-semibold">
+                  {{ item.quantite }}
+                </span>
+              </td>
+              <td class="py-4 text-right font-semibold">{{ item.total }} GNF</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-6 flex items-center justify-between flex-wrap gap-4">
+      <div class="text-lg font-bold">
+        Total : <span class="text-emerald-700">{{ panier.total }} GNF</span>
+      </div>
+
+      <form method="post">
+        {% csrf_token %}
+        <button class="rounded-xl bg-emerald-600 text-white px-5 py-3 font-semibold hover:bg-emerald-500 transition">
+          Valider la commande ✅
+        </button>
+      </form>
+    </div>
+  {% else %}
+    <div class="text-center py-12">
+      <div class="text-4xl mb-2">🫙</div>
+      <div class="text-lg font-semibold">Panier vide</div>
+      <div class="text-slate-600">Ajoute des plats depuis le menu.</div>
+      <a href="/" class="inline-block mt-5 rounded-xl bg-slate-900 text-white px-5 py-3 font-semibold hover:bg-slate-800 transition">
+        Retour au menu
+      </a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

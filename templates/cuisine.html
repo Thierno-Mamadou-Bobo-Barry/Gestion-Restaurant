@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Cuisine{% endblock %}
+
+{% block content %}
+<div class="flex items-end justify-between gap-4 flex-wrap mb-6">
+  <div>
+    <h1 class="text-3xl font-bold">👨‍🍳 Dashboard Cuisine</h1>
+    <p class="text-slate-600">Commandes en préparation : marque-les prêtes.</p>
+  </div>
+
+  <a href="/logout/" class="rounded-xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-800 transition">
+    Changer de rôle
+  </a>
+</div>
+
+<div class="grid md:grid-cols-2 gap-5">
+  {% for cmd in commandes %}
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-6">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-sm text-slate-500">Commande</div>
+          <div class="text-xl font-bold">#{{ cmd.id }}</div>
+          <div class="text-sm text-slate-600 mt-1">Table : <span class="font-semibold">{{ cmd.table.numero }}</span></div>
+        </div>
+        <span class="rounded-full bg-sky-50 text-sky-800 border border-sky-200 px-3 py-1 text-sm font-semibold">
+          EN PRÉPARATION
+        </span>
+      </div>
+
+      <div class="mt-4 border-t pt-4">
+        <div class="text-sm font-semibold text-slate-700 mb-2">Détails</div>
+        <ul class="text-sm text-slate-600 space-y-1">
+          {% for item in cmd.items.all %}
+            <li>• {{ item.plat.nom }} × <span class="font-semibold">{{ item.quantite }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="mt-5 flex items-center justify-between">
+        <div class="font-bold">Total : <span class="text-emerald-700">{{ cmd.total }} GNF</span></div>
+        <a href="/cuisine/prete/{{ cmd.id }}/"
+           class="rounded-xl bg-emerald-600 text-white px-4 py-3 font-semibold hover:bg-emerald-500 transition">
+          Marquer prête 🍳
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-10 text-center md:col-span-2">
+      <div class="text-4xl mb-2">🍽️</div>
+      <div class="text-lg font-semibold">Aucune commande en préparation</div>
+      <div class="text-slate-600">Attends qu’un serveur prenne une commande.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

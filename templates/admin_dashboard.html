@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="flex items-end justify-between gap-4 flex-wrap mb-6">
+  <div>
+    <h1 class="text-3xl font-bold">🛠️ Dashboard Admin</h1>
+    <p class="text-slate-600">Toutes les commandes (en attente, préparation, prêtes).</p>
+  </div>
+
+  <div class="flex gap-2">
+    <a href="/admin/" class="rounded-xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-800 transition">
+      Django Admin →
+    </a>
+    <a href="/logout/" class="rounded-xl bg-slate-700 text-white px-4 py-3 font-semibold hover:bg-slate-600 transition">
+      Déconnexion
+    </a>
+  </div>
+</div>
+
+<div class="rounded-3xl border border-slate-200 bg-white shadow-sm overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-slate-50 border-b">
+        <tr class="text-left text-slate-600">
+          <th class="py-3 px-4">#</th>
+          <th class="py-3 px-4">Table</th>
+          <th class="py-3 px-4">État</th>
+          <th class="py-3 px-4">Total</th>
+          <th class="py-3 px-4">Détails</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for cmd in commandes %}
+          <tr class="border-b last:border-b-0">
+            <td class="py-4 px-4 font-bold">#{{ cmd.id }}</td>
+            <td class="py-4 px-4">Table {{ cmd.table.numero }}</td>
+
+            <td class="py-4 px-4">
+              {% if cmd.etat == "EN_ATTENTE" %}
+                <span class="rounded-full bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 text-xs font-semibold">
+                  EN ATTENTE
+                </span>
+              {% elif cmd.etat == "EN_PREPARATION" %}
+                <span class="rounded-full bg-sky-50 text-sky-800 border border-sky-200 px-3 py-1 text-xs font-semibold">
+                  EN PRÉPARATION
+                </span>
+              {% else %}
+                <span class="rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 px-3 py-1 text-xs font-semibold">
+                  PRÊTE
+                </span>
+              {% endif %}
+            </td>
+
+            <td class="py-4 px-4 font-semibold text-emerald-700">{{ cmd.total }} GNF</td>
+
+            <td class="py-4 px-4 text-slate-700">
+              <ul class="list-disc ml-5">
+                {% for item in cmd.items.all %}
+                  <li>{{ item.plat.nom }} × {{ item.quantite }}</li>
+                {% endfor %}
+              </ul>
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td class="py-10 px-4 text-center text-slate-600" colspan="5">Aucune commande.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

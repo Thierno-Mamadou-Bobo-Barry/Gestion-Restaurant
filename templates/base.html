@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}Restaurant{% endblock %}</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 text-slate-800">
+  <!-- Top bar -->
+  <header class="sticky top-0 z-10 bg-white/80 backdrop-blur border-b border-slate-200">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center gap-2">
+        <span class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-slate-900 text-white font-bold">R</span>
+        <div class="leading-tight">
+          <div class="font-semibold">Restaurant App</div>
+          <div class="text-xs text-slate-500">Commande • Serveur • Cuisine</div>
+        </div>
+      </a>
+
+      <div class="flex items-center gap-2">
+        {% if user.is_authenticated %}
+          <span class="hidden sm:inline text-sm text-slate-600">
+            Connecté : <span class="font-semibold">{{ user.login }}</span>
+            <span class="text-slate-400">•</span>
+            <span class="font-semibold">{{ user.role }}</span>
+          </span>
+
+          <a href="/logout/"
+             class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-white text-sm hover:bg-slate-800 transition">
+            Déconnexion
+          </a>
+        {% else %}
+          <a href="/login/"
+             class="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-white text-sm hover:bg-slate-800 transition">
+            Connexion
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </header>
+
+  <!-- Messages -->
+  <div class="max-w-6xl mx-auto px-4 pt-6">
+    {% if messages %}
+      <div class="space-y-3">
+        {% for message in messages %}
+          <div class="rounded-2xl border px-4 py-3 shadow-sm
+            {% if message.tags == 'success' %} bg-emerald-50 border-emerald-200 text-emerald-800
+            {% elif message.tags == 'error' %} bg-rose-50 border-rose-200 text-rose-800
+            {% else %} bg-slate-50 border-slate-200 text-slate-700 {% endif %}">
+            <div class="text-sm font-medium">{{ message }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Page content -->
+  <main class="max-w-6xl mx-auto px-4 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 pb-10 text-center text-xs text-slate-500">
+    Projet Django Restaurant • Présentation université
+  </footer>
+</body>
+</html>

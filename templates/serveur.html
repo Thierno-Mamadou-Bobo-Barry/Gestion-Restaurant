@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Serveur{% endblock %}
+
+{% block content %}
+<div class="flex items-end justify-between gap-4 flex-wrap mb-6">
+  <div>
+    <h1 class="text-3xl font-bold">🧑‍🍽️ Dashboard Serveur</h1>
+    <p class="text-slate-600">Commandes en attente : prends-en une pour lancer la préparation.</p>
+  </div>
+
+  <a href="/logout/" class="rounded-xl bg-slate-900 text-white px-4 py-3 font-semibold hover:bg-slate-800 transition">
+    Changer de rôle
+  </a>
+</div>
+
+<div class="grid md:grid-cols-2 gap-5">
+  {% for cmd in commandes %}
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-6">
+      <div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-sm text-slate-500">Commande</div>
+          <div class="text-xl font-bold">#{{ cmd.id }}</div>
+          <div class="text-sm text-slate-600 mt-1">Table : <span class="font-semibold">{{ cmd.table.numero }}</span></div>
+        </div>
+        <span class="rounded-full bg-amber-50 text-amber-800 border border-amber-200 px-3 py-1 text-sm font-semibold">
+          EN ATTENTE
+        </span>
+      </div>
+
+      <div class="mt-4 border-t pt-4">
+        <div class="text-sm font-semibold text-slate-700 mb-2">Détails</div>
+        <ul class="text-sm text-slate-600 space-y-1">
+          {% for item in cmd.items.all %}
+            <li>• {{ item.plat.nom }} × <span class="font-semibold">{{ item.quantite }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="mt-5 flex items-center justify-between">
+        <div class="font-bold">Total : <span class="text-emerald-700">{{ cmd.total }} GNF</span></div>
+        <a href="/serveur/prendre/{{ cmd.id }}/"
+           class="rounded-xl bg-indigo-600 text-white px-4 py-3 font-semibold hover:bg-indigo-500 transition">
+          Prendre ✅
+        </a>
+      </div>
+    </div>
+  {% empty %}
+    <div class="rounded-3xl border border-slate-200 bg-white shadow-sm p-10 text-center md:col-span-2">
+      <div class="text-4xl mb-2">✅</div>
+      <div class="text-lg font-semibold">Aucune commande en attente</div>
+      <div class="text-slate-600">Rafraîchis la page après qu’une table valide une commande.</div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}
